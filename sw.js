@@ -1,4 +1,4 @@
-const CACHE = "app-pedidos-v15";
+const CACHE = "Restaurant-app-v1";
 const FILES = [
   "./",
   "index.html",
@@ -19,7 +19,7 @@ self.addEventListener("install", e => {
 });
 
 self.addEventListener("activate", e => {
-  e.waitUntil(
+  eg.waitUntil(
     caches.keys().then(keys =>
       Promise.all(
         keys.filter(key => key !== CACHE).map(key => caches.delete(key))

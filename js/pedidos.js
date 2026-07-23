@@ -261,7 +261,7 @@ async function guardarPedido(){
         const plato = await db.platos.get(id);
         await db.platos.update(id, { cantidad: plato.cantidad - cantPedida });
       }
-      await tabla.add({cliente, items, entregado: false, pagado: true, timestamp: Date.now()});
+      await tabla.add({cliente, items, entregado: false, pagado: false, timestamp: Date.now()});
     }).catch(err => {
       if(!stockInsuficiente) throw err;
     });
@@ -343,11 +343,11 @@ async function cardHTML(p){
     <div class="card-toggles">
       <label class="toggle">
         <input type="checkbox" ${p.entregado? 'checked' : ''} onchange="toggleEntregado(${p.id}, this.checked)">
-        Entregado
+        Entregado?
       </label>
       <label class="toggle">
         <input type="checkbox" ${p.pagado? 'checked' : ''} onchange="togglePago(${p.id}, this.checked)">
-        Pago
+        Pagado?
       </label>
     </div>
     <div class="card-actions">
