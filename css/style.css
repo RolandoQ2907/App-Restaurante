@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'RoundGothic';
-  src: url(../font/typo-round/Typo_Round_Bold_Demo.otf) format('opentype');
+  src: url(../font/Typo_Round_Bold_Demo.otf) format('opentype');
 }
 *{
   font-family: 'RoundGothic';
