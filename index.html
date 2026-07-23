@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0A1F17">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/png" href="icons/icon-512.png">
+  <title>La Llajwita</title>
+</head>
+<body>
+  <div id="app">
+    <header class="brand-header">
+      <div class="brand-logo-slot" id="brand-logo">
+        <img id="icon-header" src="icons/icon-512.png" alt="La Llajwita">
+      </div>
+      <span class="brand-name-slot" id="brand-name">
+        La LLAJWITA
+        <small>Panel de pedidos</small>
+      </span>
+    </header>
+
+    <main id="content"></main>
+
+    <nav class="nav">
+      <button id="btn-nav-pedidos" data-page="pedidos" class="nav-btn active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6a1 1 0 0 1 1 1v1H8V4a1 1 0 0 1 1-1z"/><rect x="5" y="5" width="14" height="16" rx="2"/><path d="M9 12h6M9 16h4"/></svg>
+        <span>Pedidos</span>
+      </button>
+      <button id="btn-nav-platos" data-page="platos" class="nav-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3v7a2 2 0 0 0 2 2v9"/><path d="M9 12a2 2 0 0 0 2-2V3"/><path d="M17 3c-1.7 0-3 1.6-3 4v3c0 1.1.9 2 2 2v9"/></svg>
+        <span>Platos</span>
+      </button>
+    </nav>
+  </div>
+
+  <div id="toast"></div>
+  <div id="modal" class="modal-hidden"></div>
+
+  <script src="lib/dexie.min.js"></script>
+  <script type="module" src="js/main.js"></script>
+
+  <script>
+    if('serviceWorker' in navigator){
+      navigator.serviceWorker.register('sw.js');
+    }
+  </script>
+</body>
+</html>
