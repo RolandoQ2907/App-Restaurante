@@ -1,92 +1,26 @@
 import { db, getFechaHoy, getTablaPedidos, getTablaPedidosSiExiste, iniciarDia, estaIniciado } from './db.js';
 import { showToast, openModal } from './ui.js';
 
-let fechaActual = getFechaHoy();
+let fechaActual = localStorage.getItem('fechaSeleccionada') || getFechaHoy();
 let pedidosIniciados = false;
 
-let mirandoDiaActual = true;
-let avisoCambioDiaMostrado = false;
 
-const NOMBRES_DIAS = ['LUN','MAR','MIE','JUE','VIE','SAB','DOM'];
-
-function chequearCambioDeDia(){
-  if(!mirandoDiaActual) return;
-
-  const hoyReal = getFechaHoy();
-  if(hoyReal === fechaActual){
-    avisoCambioDiaMostrado = false;
-    return;
-  }
-  if(avisoCambioDiaMostrado) return; 
-  avisoCambioDiaMostrado = true;
-
-  showToast(`Cambio el dia. Estas viendo pedidos de ${formatearFecha(fechaActual)}`, {
-    texto: 'Ir a hoy',
-    onClick: () => {
-      fechaActual = hoyReal;
-      mirandoDiaActual = true;
-      avisoCambioDiaMostrado = false;
-      document.querySelector('[data-page="pedidos"]')?.click();
-    }
-  });
-}
-
-setInterval(chequearCambioDeDia, 60000);
-document.addEventListener('visibilitychange', () => {
-  if(document.visibilityState === 'visible') chequearCambioDeDia();
-});
-
-function obtenerSemana(fechaISO){
-  const d = new Date(fechaISO);
-  const diaSemana = d.getDay();
-  const offsetLunes = (diaSemana + 6) % 7;
-  const lunes = new Date(d);
-  lunes.setDate(d.getDate() - offsetLunes);
-
-  const dias = [];
-  for(let i = 0; i < 7; i++){
-    const x = new Date(lunes);
-    x.setDate(lunes.getDate() + i);
-    dias.push(x.toISOString().split('T')[0]);
-  }
-  return dias;
-}
 
 function panelFechaHTML(){
   const hoy = getFechaHoy();
-  const semana = obtenerSemana(fechaActual);
-
-  const diasHTML = semana.map(fecha => {
-    const d = new Date(fecha);
-    const nombre = NOMBRES_DIAS[(d.getDay() + 6) % 7];
-    const numero = d.getDate();
-    const esSeleccionado = fecha === fechaActual;
-    const esHoy = fecha === hoy;
-    return `
-      <button type="button" class="dia-btn ${esSeleccionado ? 'selected' : ''} ${esHoy ? 'hoy-real' : ''}" data-fecha="${fecha}">
-        <span class="dia-nombre">${nombre}</span>
-        <span class="dia-num">${numero}</span>
-      </button>
-    `;
-  }).join('');
+  const esHoy = fechaActual === hoy;
 
   return `
     <div class="fecha-panel glass">
-      <div class="fecha-panel-top">
-        <div>
-          <span class="eyebrow">Fecha del servicio</span>
-          <p class="fecha-subtitulo" id="tituloFecha">${formatearFechaLarga(fechaActual)}</p>
-        </div>
-        <button type="button" class="btn-hoy" id="btnHoy" ${fechaActual === hoy ? 'disabled' : ''}>Hoy</button>
-      </div>
-      <div class="semana-row">
-        <button type="button" class="btn-semana" id="btnSemanaPrev" aria-label="Semana anterior">‹</button>
-        <div class="semana-dias">${diasHTML}</div>
-        <button type="button" class="btn-semana" id="btnSemanaNext" aria-label="Semana siguiente">›</button>
-        <button type="button" class="btn-calendario" id="btnCalendario" aria-label="Elegir fecha en calendario">
+      <span class="eyebrow">Fecha del servicio</span>
+      <div class="fecha-picker-row">
+        <button type="button" class="btn-fecha-picker" id="btnAbrirCalendario">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+          <span id="tituloFecha">${formatearFechaLarga(fechaActual)}</span>
         </button>
+        <button type="button" class="btn-hoy" id="btnHoy" ${esHoy ? 'disabled' : ''}>Hoy</button>
       </div>
+      <input type="date" id="inputFecha" value="${fechaActual}" max="${hoy}" style="position:fixed;opacity:0;pointer-events:none;top:-100px;">
     </div>
   `;
 }
@@ -150,12 +84,7 @@ export async function initPedidos(){
   };
 
   document.getElementById('btnHoy').onclick = () => fijarFecha(getFechaHoy());
-  document.getElementById('btnSemanaPrev').onclick = () => cambiarSemana(-1);
-  document.getElementById('btnSemanaNext').onclick = () => cambiarSemana(1);
-  document.getElementById('btnCalendario').onclick = () => abrirCalendario();
-  document.querySelectorAll('.dia-btn').forEach(btn => {
-    btn.onclick = () => fijarFecha(btn.dataset.fecha);
-  });
+  document.getElementById('btnAbrirCalendario').onclick = () => abrirCalendario();
 
   document.getElementById('addPlatoPedido').onclick = () => agregarItem('plato');
   document.getElementById('addBebidaPedido').onclick = () => agregarItem('bebida');
@@ -412,16 +341,9 @@ window.togglePago = async (id, val) => {
   cargarPedidos();
 }
 
-function cambiarSemana(dir){
-  const d = new Date(fechaActual);
-  d.setDate(d.getDate() + dir * 7);
-  fijarFecha(d.toISOString().split('T')[0]);
-}
-
 function fijarFecha(nuevaFecha){
   fechaActual = nuevaFecha;
-  mirandoDiaActual = (fechaActual === getFechaHoy());
-  avisoCambioDiaMostrado = false;
+  localStorage.setItem('fechaSeleccionada', fechaActual);
   rerenderPagina();
 }
 
@@ -432,22 +354,10 @@ async function rerenderPagina(){
 }
 
 function abrirCalendario(){
-  const input = document.createElement('input');
-  input.type = 'date';
-  input.max = getFechaHoy();
-  input.value = fechaActual;
-  input.style.position = 'fixed';
-  input.style.opacity = '0';
-  input.style.pointerEvents = 'none';
-  input.style.top = '-100px';
-  document.body.appendChild(input);
-
+  const input = document.getElementById('inputFecha');
   input.onchange = e => {
-    fijarFecha(e.target.value);
-    input.remove();
+    if(e.target.value) fijarFecha(e.target.value);
   };
-  input.addEventListener('blur', () => setTimeout(() => input.remove(), 300));
-
   if(input.showPicker){
     input.showPicker();
   } else {
@@ -459,7 +369,11 @@ function quitarTildes(s){
   return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 }
 
-function formatearFecha(f){ return quitarTildes(new Date(f).toLocaleDateString('es-AR')); }
+function parsearFechaLocal(f){
+  const [anio, mes, dia] = f.split('-').map(Number);
+  return new Date(anio, mes - 1, dia);
+}
+function formatearFecha(f){ return quitarTildes(parsearFechaLocal(f).toLocaleDateString('es-AR')); }
 function formatearFechaLarga(f){
-  return quitarTildes(new Date(f).toLocaleDateString('es-AR', { weekday: 'long', day: 'numeric', month: 'long' }));
+  return quitarTildes(parsearFechaLocal(f).toLocaleDateString('es-AR', { weekday: 'long', day: 'numeric', month: 'long' }));
 }

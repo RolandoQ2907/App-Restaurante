@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'RoundGothic';
-  src: url(../font/Typo_Round_Bold_Demo.otf) format('opentype');
+  src: url(../font/typo-round/Typo_Round_Bold_Demo.otf) format('opentype');
 }
 *{
   font-family: 'RoundGothic';
@@ -176,26 +176,49 @@ body{
 .num{ font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
 
 .fecha-panel{
-  padding: 14px;
+  padding: 14px 16px;
   margin: 8px;
   background-color: var(--bg-panel);
   border-radius: var(--radius-lg);
   border: 1px solid var(--border-subtle);
 }
-.fecha-panel-top{
+.fecha-picker-row{
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 10px;
+  gap: 10px;
+  margin-top: 6px;
 }
-.fecha-subtitulo{
-  margin: 2px 0 0;
+.btn-fecha-picker{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+  background: var(--bg-panel-2);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+}
+.btn-fecha-picker svg{
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  color: var(--accent);
+}
+.btn-fecha-picker span{
   font-size: 15px;
   font-weight: 700;
-  color: var(--text);
   text-transform: capitalize;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .btn-hoy{
+  flex-shrink: 0;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.05em;
@@ -207,69 +230,6 @@ body{
   cursor: pointer;
 }
 .btn-hoy:disabled{ opacity: 0.35; cursor: default; }
-
-.semana-row{
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-.btn-semana{
-  flex-shrink: 0;
-  width: 28px;
-  height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  border: none;
-  color: var(--text-muted);
-  cursor: pointer;
-  border-radius: var(--radius-sm);
-}
-.btn-semana:hover{ color: var(--accent); background: var(--glass-bg); }
-.semana-dias{
-  flex: 1;
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 4px;
-  min-width: 0;
-}
-.dia-btn{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2px;
-  padding: 6px 2px;
-  height: 52px;
-  background: var(--bg-panel-2);
-  border: 1px solid transparent;
-  border-radius: 12px;
-  color: var(--text-muted);
-  cursor: pointer;
-}
-.dia-btn .dia-nombre{ font-size: 9.5px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; opacity: 0.8; }
-.dia-btn .dia-num{ font-family: var(--font-mono); font-size: 15px; font-weight: 700; }
-.dia-btn.hoy-real:not(.selected){ color: var(--text); }
-.dia-btn.selected{
-  background: rgba(174,209,64,0.14);
-  border-color: var(--accent);
-  color: var(--accent);
-}
-.btn-calendario{
-  flex-shrink: 0;
-  width: 34px;
-  height: 34px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--bg-panel-2);
-  border: 1px solid var(--border-subtle);
-  border-radius: 10px;
-  color: var(--text-muted);
-  cursor: pointer;
-}
-.btn-calendario svg{ width: 16px; height: 16px; }
 
 .btn{
   padding: 10px 14px;
@@ -795,6 +755,7 @@ body{
   }
   .plato-item input { padding: 8px 6px; font-size: 13px; }
   .platos-wrapper { margin: 6px; padding: 12px; }
-  .semana-dias{ gap: 3px; }
-  .dia-btn{ padding: 5px 1px; }
+
 }
+
+

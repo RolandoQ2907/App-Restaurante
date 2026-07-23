@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -9,6 +10,7 @@
   <link rel="icon" type="image/png" href="icons/icon-512.png">
   <title>La Llajwita</title>
 </head>
+
 <body>
   <div id="app">
     <header class="brand-header">
@@ -25,11 +27,21 @@
 
     <nav class="nav">
       <button id="btn-nav-pedidos" data-page="pedidos" class="nav-btn active">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6a1 1 0 0 1 1 1v1H8V4a1 1 0 0 1 1-1z"/><rect x="5" y="5" width="14" height="16" rx="2"/><path d="M9 12h6M9 16h4"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round">
+          <path d="M9 3h6a1 1 0 0 1 1 1v1H8V4a1 1 0 0 1 1-1z" />
+          <rect x="5" y="5" width="14" height="16" rx="2" />
+          <path d="M9 12h6M9 16h4" />
+        </svg>
         <span>Pedidos</span>
       </button>
       <button id="btn-nav-platos" data-page="platos" class="nav-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3v7a2 2 0 0 0 2 2v9"/><path d="M9 12a2 2 0 0 0 2-2V3"/><path d="M17 3c-1.7 0-3 1.6-3 4v3c0 1.1.9 2 2 2v9"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round">
+          <path d="M7 3v7a2 2 0 0 0 2 2v9" />
+          <path d="M9 12a2 2 0 0 0 2-2V3" />
+          <path d="M17 3c-1.7 0-3 1.6-3 4v3c0 1.1.9 2 2 2v9" />
+        </svg>
         <span>Platos</span>
       </button>
     </nav>
@@ -42,9 +54,10 @@
   <script type="module" src="js/main.js"></script>
 
   <script>
-    if('serviceWorker' in navigator){
+    if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js');
     }
   </script>
 </body>
+
 </html>

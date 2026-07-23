@@ -1,4 +1,4 @@
-const CACHE = "Restaurant-app-v1";
+const CACHE = "Restaurant-app-v5";
 const FILES = [
   "./",
   "index.html",
@@ -19,7 +19,7 @@ self.addEventListener("install", e => {
 });
 
 self.addEventListener("activate", e => {
-  eg.waitUntil(
+  e.waitUntil(
     caches.keys().then(keys =>
       Promise.all(
         keys.filter(key => key !== CACHE).map(key => caches.delete(key))
